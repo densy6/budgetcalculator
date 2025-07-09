@@ -89,7 +89,7 @@
       const combinedCount = parseInt(document.getElementById("combinedGeofences").value) || 0;
 
       const remaining = total - streaming;
-      const totalGeofences = poiCount + employerCount + competitorCount;
+      const totalGeofences = poiCount + employerCount + competitorCount + combinedCount;
 
       // Avoid division by zero
       const perGeofenceBudget = totalGeofences > 0 ? remaining / totalGeofences : 0;
