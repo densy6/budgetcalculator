@@ -61,7 +61,8 @@ hr {
   </style>
 </head>
 <body>
-
+<div class="card">
+  
   <h2>Geofence Budget Calculator</h2>
 
   <label>Total Budget</label>
@@ -96,6 +97,8 @@ hr {
   <p><strong>Competitor-Resident Budget:</strong> $<span id="competitorBudgetVal">0.00</span></p>
   </div>
  <button onclick="resetForm()" style="background-color: #ef6f22; color: white; margin-top: 10px;">Reset</button>
+  </div>
+  </body>
 
 
 
@@ -164,6 +167,28 @@ function calculateGeofenceBudgets() {
     combined.textContent = "0.00";
   }
 }
+/* Page background and centering */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f2f5;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Full screen height */
+}
+
+/* Centered card container */
+.card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+}
+
 
   </script>
 
