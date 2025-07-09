@@ -90,10 +90,14 @@
 
       const remaining = total - streaming;
       const totalGeofences = poiCount + employerCount + competitorCount;
-      const poiBudget = totalGeofences > 0 ? (remaining * poiCount) / totalGeofences : 0;
-      const employerBudget = totalGeofences > 0 ? (remaining * employerCount) / totalGeofences : 0;
-      const competitorBudget = totalGeofences > 0 ? (remaining * competitorCount) / totalGeofences : 0;
-      const combinedBudget = totalGeofences > 0 ? (remaining * combinedCount) / totalGeofences : 0;
+
+      // Avoid division by zero
+      const perGeofenceBudget = totalGeofences > 0 ? remaining / totalGeofences : 0;
+
+      const poiBudget = perGeofenceBudget * poiCount;
+      const employerBudget = perGeofenceBudget * employerCount;
+      const competitorBudget = perGeofenceBudget * competitorCount;
+      const combinedBudget = perGeofenceBudget * combinedCount;
 
       document.getElementById("results").innerHTML = `
         <p><strong>Remaining Budget:</strong> $${remaining.toFixed(2)}</p>
