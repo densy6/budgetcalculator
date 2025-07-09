@@ -77,6 +77,10 @@
       display: block;
       margin-top: 10px;
     }
+
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -87,12 +91,14 @@
     <input type="number" id="totalBudget" placeholder="Enter total budget" />
 
     <label>
-      <input type="checkbox" id="includeStreaming" />
+      <input type="checkbox" id="includeStreaming" onchange="toggleStreamingField()" />
       Include Streaming TV (split 50% of Addressable)
     </label>
 
-    <label>Streaming TV Budget (auto-filled)</label>
-    <input type="number" id="streamingBudget" disabled />
+    <div id="streamingSection" class="hidden">
+      <label>Streaming TV Budget (auto-filled)</label>
+      <input type="number" id="streamingBudget" disabled />
+    </div>
 
     <label>Addressable Campaign Budget (auto-filled)</label>
     <input type="number" id="addressableBudget" disabled />
@@ -106,86 +112,4 @@
     <input type="number" id="employerGeofences" placeholder="Enter number of Employer geofences" />
 
     <label>Competitor-Resident Geofences</label>
-    <input type="number" id="competitorGeofences" placeholder="Enter number of Competitor-Resident geofences" />
-
-    <label>Combined POI + Employer Geofences (optional)</label>
-    <input type="number" id="combinedGeofences" placeholder="Enter combined POI + Employer geofences" />
-
-    <button onclick="calculateGeofenceBudgets()">Calculate</button>
-
-    <div class="output" id="result">
-      <p><strong>Addressable Budget:</strong> $<span id="addressableBudgetVal">0.00</span></p>
-      <p><strong>Streaming TV Budget:</strong> $<span id="streamingBudgetVal">0.00</span></p>
-      <p><strong>Remaining Budget:</strong> $<span id="remainingBudgetVal">0.00</span></p>
-      <p><strong>Budget for Each Geofence:</strong> $<span id="perGeofenceVal">0.00</span></p>
-      <hr />
-      <p><strong>POI Campaign Budget:</strong> $<span id="poiBudgetVal">0.00</span></p>
-      <p><strong>Employer Campaign Budget:</strong> $<span id="employerBudgetVal">0.00</span></p>
-      <p><strong>Competitor-Resident Campaign Budget:</strong> $<span id="competitorBudgetVal">0.00</span></p>
-      <p><strong>Combined POI + Employer Budget:</strong> $<span id="combinedBudgetVal">0.00</span></p>
-    </div>
-
-    <button onclick="resetForm()" style="background-color: #ef6f22; color: white; margin-top: 10px;">Reset</button>
-  </div>
-
-  <script>
-    function autoCalculateStreaming() {
-      const total = parseFloat(document.getElementById("totalBudget").value) || 0;
-      const includeStreaming = document.getElementById("includeStreaming").checked;
-
-      const halfBudget = total * 0.5;
-      let addressable = halfBudget;
-      let streaming = 0;
-
-      if (includeStreaming) {
-        addressable = halfBudget / 2;
-        streaming = halfBudget / 2;
-      }
-
-      document.getElementById("addressableBudget").value = addressable.toFixed(2);
-      document.getElementById("streamingBudget").value = streaming.toFixed(2);
-
-      document.getElementById("addressableBudgetVal").textContent = addressable.toFixed(2);
-      document.getElementById("streamingBudgetVal").textContent = streaming.toFixed(2);
-    }
-
-    function calculateGeofenceBudgets() {
-      const totalBudget = parseFloat(document.getElementById("totalBudget").value) || 0;
-      const streamingBudget = parseFloat(document.getElementById("streamingBudget").value) || 0;
-      const addressableBudget = parseFloat(document.getElementById("addressableBudget").value) || 0;
-
-      const poiCount = parseInt(document.getElementById("poiGeofences").value) || 0;
-      const employerCount = parseInt(document.getElementById("employerGeofences").value) || 0;
-      const competitorCount = parseInt(document.getElementById("competitorGeofences").value) || 0;
-      const combinedCount = parseInt(document.getElementById("combinedGeofences").value) || 0;
-
-      const totalGeofences = poiCount + employerCount + competitorCount + combinedCount;
-
-      const remainingBudget = totalBudget - (streamingBudget + addressableBudget);
-      const perGeofenceBudget = totalGeofences > 0 ? remainingBudget / totalGeofences : 0;
-
-      const poiBudget = perGeofenceBudget * poiCount;
-      const employerBudget = perGeofenceBudget * employerCount;
-      const competitorBudget = perGeofenceBudget * competitorCount;
-      const combinedBudget = perGeofenceBudget * combinedCount;
-
-      document.getElementById("remainingBudgetVal").textContent = remainingBudget.toFixed(2);
-      document.getElementById("perGeofenceVal").textContent = perGeofenceBudget.toFixed(2);
-      document.getElementById("poiBudgetVal").textContent = poiBudget.toFixed(2);
-      document.getElementById("employerBudgetVal").textContent = employerBudget.toFixed(2);
-      document.getElementById("competitorBudgetVal").textContent = competitorBudget.toFixed(2);
-      document.getElementById("combinedBudgetVal").textContent = combinedBudget.toFixed(2);
-    }
-
-    function resetForm() {
-      const ids = ["totalBudget", "streamingBudget", "addressableBudget", "poiGeofences", "employerGeofences", "competitorGeofences", "combinedGeofences"];
-      ids.forEach(id => document.getElementById(id).value = "");
-
-      document.getElementById("includeStreaming").checked = false;
-
-      const outputs = ["streamingBudgetVal", "addressableBudgetVal", "remainingBudgetVal", "perGeofenceVal", "poiBudgetVal", "employerBudgetVal", "competitorBudgetVal", "combinedBudgetVal"];
-      outputs.forEach(id => document.getElementById(id).textContent = "0.00");
-    }
-  </script>
-</body>
-</html>
+    <input type="number" id="competitor
