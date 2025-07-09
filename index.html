@@ -83,46 +83,41 @@
     }
 
     function calculateGeofenceBudgets() {
-      const totalBudget = parseFloat(document.getElementById("totalBudget").value) || 0;
-      const streamingBudget = parseFloat(document.getElementById("streamingBudget").value) || 0;
+  const totalBudget = parseFloat(document.getElementById("totalBudget").value) || 0;
+  const streamingBudget = parseFloat(document.getElementById("streamingBudget").value) || 0;
 
-      const poiCount = parseInt(document.getElementById("poiGeofences").value) || 0;
-      const employerCount = parseInt(document.getElementById("employerGeofences").value) || 0;
-      const competitorCount = parseInt(document.getElementById("competitorGeofences").value) || 0;
-      const combinedCount = parseInt(document.getElementById("combinedGeofences").value) || 0;
+  const poiCount = parseInt(document.getElementById("poiGeofences").value) || 0;
+  const employerCount = parseInt(document.getElementById("employerGeofences").value) || 0;
+  const competitorCount = parseInt(document.getElementById("competitorGeofences").value) || 0;
+  const combinedCount = parseInt(document.getElementById("combinedGeofences").value) || 0;
 
-      const usingCombined = combinedCount > 0;
+  const totalGeofences = poiCount + employerCount + competitorCount + combinedCount;
 
-      // Calculate total geofences
-      const poiEmployerTotal = usingCombined ? 0 : poiCount + employerCount;
-      const totalGeofences = poiEmployerTotal + competitorCount + combinedCount;
+  const remainingBudget = totalBudget - streamingBudget;
+  const perGeofenceBudget = totalGeofences > 0 ? remainingBudget / totalGeofences : 0;
 
-      const remainingBudget = totalBudget - streamingBudget;
-      const perGeofenceBudget = totalGeofences > 0 ? remainingBudget / totalGeofences : 0;
+  const poiBudget = perGeofenceBudget * poiCount;
+  const employerBudget = perGeofenceBudget * employerCount;
+  const competitorBudget = perGeofenceBudget * competitorCount;
+  const combinedBudget = perGeofenceBudget * combinedCount;
 
-      // Individual Budgets
-      const poiBudget = usingCombined ? 0 : perGeofenceBudget * poiCount;
-      const employerBudget = usingCombined ? 0 : perGeofenceBudget * employerCount;
-      const competitorBudget = perGeofenceBudget * competitorCount;
-      const combinedBudget = usingCombined ? perGeofenceBudget * combinedCount : 0;
+  // Output updated values directly to the spans
+  document.getElementById("streamingBudgetVal").textContent = streamingBudget.toFixed(2);
+  document.getElementById("remainingBudgetVal").textContent = remainingBudget.toFixed(2);
+  document.getElementById("perGeofenceVal").textContent = perGeofenceBudget.toFixed(2);
+  document.getElementById("poiBudgetVal").textContent = poiBudget.toFixed(2);
+  document.getElementById("employerBudgetVal").textContent = employerBudget.toFixed(2);
+  document.getElementById("competitorBudgetVal").textContent = competitorBudget.toFixed(2);
 
-      // Output HTML
-      document.getElementById("result").innerHTML = `
-        <p><strong>Streaming TV Budget:</strong> $${streamingBudget.toFixed(2)}</p>
-        <p><strong>Remaining Budget:</strong> $${remainingBudget.toFixed(2)}</p>
-        <p><strong>Budget for Each Geofence:</strong> $${perGeofenceBudget.toFixed(2)}</p>
-        ${usingCombined
-          ? `<p><strong>Combined POI + Employer Budget:</strong> $${combinedBudget.toFixed(2)}</p>`
-          : `
-            <p><strong>POI Budget:</strong> $${poiBudget.toFixed(2)}</p>
-            <p><strong>Employer Budget:</strong> $${employerBudget.toFixed(2)}</p>
-          `
-        }
-        <p><strong>Competitor-Resident Budget:</strong> $${competitorBudget.toFixed(2)}</p>
-      `;
-    }
-document.getElementById("employerGeofences").addEventListener("input", checkGeofenceConflict);
-document.getElementById("combinedGeofences").addEventListener("input", checkGeofenceConflict);
+  // You can display Combined Budget below if you'd like
+  if (!document.getElementById("combinedBudgetVal")) {
+    const combinedLine = document.createElement("p");
+    combinedLine.innerHTML = `<strong>Combined POI + Employer Budget:</strong> $<span id="combinedBudgetVal">${combinedBudget.toFixed(2)}</span>`;
+    document.getElementById("result").appendChild(combinedLine);
+  } else {
+    document.getElementById("combinedBudgetVal").textContent = combinedBudget.toFixed(2);
+  }
+}
   </script>
 
 </body>
