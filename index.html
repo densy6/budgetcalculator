@@ -22,17 +22,19 @@
       box-sizing: border-box;
     }
     button {
-      width: 100%;
-      padding: 10px;
-      background-color: #2ecc71;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    button:hover {
-      background-color: #27ae60;
-    }
+  width: 100%;
+  padding: 10px;
+  background-color: #68a4a5;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #ef6f22;
+}
     .output {
       margin-top: 20px;
       background: #e0e0e0;
@@ -75,7 +77,8 @@
   <p><strong>Employer Budget:</strong> $<span id="employerBudgetVal">0.00</span></p>
   <p><strong>Competitor-Resident Budget:</strong> $<span id="competitorBudgetVal">0.00</span></p>
   </div>
-  <button onclick="resetForm()" style="background-color: #e74c3c; margin-top: 10px;">Reset</button>
+ <button onclick="resetForm()" style="background-color: #ef6f22; color: white; margin-top: 10px;">Reset</button>
+
 
 
   <script>
