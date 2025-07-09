@@ -65,8 +65,7 @@
   <input type="number" id="combinedGeofences" placeholder="Enter combined POI + Employer geofences" />
 
   <button onclick="calculateGeofenceBudgets()">Calculate</button>
-  <button onclick="resetForm()" style="background-color: #e74c3c; margin-top: 10px;">Reset</button>
-
+  
   <div class="output" id="result">
   <p><strong>Streaming TV Budget:</strong> $<span id="streamingBudgetVal">0.00</span></p>
   <p><strong>Remaining Budget:</strong> $<span id="remainingBudgetVal">0.00</span></p>
@@ -74,6 +73,8 @@
   <p><strong>POI Budget:</strong> $<span id="poiBudgetVal">0.00</span></p>
   <p><strong>Employer Budget:</strong> $<span id="employerBudgetVal">0.00</span></p>
   <p><strong>Competitor-Resident Budget:</strong> $<span id="competitorBudgetVal">0.00</span></p>
+  <div style="margin-top: 16px;"></div> 
+  <button onclick="resetForm()" style="background-color: #e74c3c; margin-top: 10px;">Reset</button>
 </div>
 
   <script>
