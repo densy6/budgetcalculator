@@ -5,192 +5,79 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Geofence Budget Calculator</title>
   <style>
+    /* General page styling */
     body {
-  font-family: Arial, sans-serif;
-  max-width: 500px;
-  margin: auto;
-  padding: 20px;
-  background-color: #f4f4f4;
-  color: #333;
-}
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
 
-h2 {
-  text-align: center;
-  color: #68a4a5;
-}
+    /* Card styling */
+    .card {
+      background-color: #ffffff;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #68a4a5;
+    }
+
     input {
-  width: 100%;
-  padding: 10px;
-  margin: 8px 0;
-  box-sizing: border-box;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-}
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      border: 2px solid #ccc;
+      border-radius: 4px;
+    }
 
-input:focus {
-  border-color: #68a4a5;
-  outline: none;
-}
-  button {
-  width: 100%;
-  padding: 10px;
-  background-color: #68a4a5;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
-}
+    input:focus {
+      border-color: #68a4a5;
+      outline: none;
+    }
 
-button:hover {
-  background-color: #ef6f22;
-}
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #68a4a5;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #ef6f22;
+    }
+
     .output {
       margin-top: 20px;
       background: #e0e0e0;
       padding: 15px;
     }
 
-hr {
-  border: none;
-  height: 2px;
-  background-color: #68a4a5;
-  margin: 16px 0;
-}
+    hr {
+      border: none;
+      height: 2px;
+      background-color: #68a4a5;
+      margin: 16px 0;
+    }
   </style>
 </head>
 <body>
-<div class="card">
-  
-  <h2>Geofence Budget Calculator</h2>
+  <div class="card">
+    <h2>Geofence Budget Calculator</h2>
 
-  <label>Total Budget</label>
-  <input type="number" id="totalBudget" placeholder="Enter total budget" />
-
-  <label>Streaming-TV Budget (30% Auto Calculate)</label>
-  <input type="number" id="streamingBudget" placeholder="Enter streaming TV budget" />
-  <button onclick="autoCalculateStreaming()">Auto Calculate 30%</button>
-  <div style="margin-top: 16px;"></div>
-
-  <label>POI Geofences</label>
-  <input type="number" id="poiGeofences" placeholder="Enter number of POI geofences" />
-
-  <label>Employer Geofences</label>
-  <input type="number" id="employerGeofences" placeholder="Enter number of Employer geofences" />
-
-  <label>Competitor-Resident Geofences</label>
-  <input type="number" id="competitorGeofences" placeholder="Enter number of Competitor geofences" />
-
-  <label>Combined POI + Employer Geofences (optional)</label>
-  <input type="number" id="combinedGeofences" placeholder="Enter combined POI + Employer geofences" />
-
-  <button onclick="calculateGeofenceBudgets()">Calculate</button>
-  
-  <div class="output" id="result">
-  <p><strong>Streaming TV Budget:</strong> $<span id="streamingBudgetVal">0.00</span></p>
-  <p><strong>Remaining Budget:</strong> $<span id="remainingBudgetVal">0.00</span></p>
-  <p><strong>Budget for Each Geofence:</strong> $<span id="perGeofenceVal">0.00</span></p>
-  <hr style="margin: 10px 0;" />
-  <p><strong>POI Budget:</strong> $<span id="poiBudgetVal">0.00</span></p>
-  <p><strong>Employer Budget:</strong> $<span id="employerBudgetVal">0.00</span></p>
-  <p><strong>Competitor-Resident Budget:</strong> $<span id="competitorBudgetVal">0.00</span></p>
-  </div>
- <button onclick="resetForm()" style="background-color: #ef6f22; color: white; margin-top: 10px;">Reset</button>
-  </div>
-  </body>
-
-
-
-  <script>
-    function autoCalculateStreaming() {
-      const total = parseFloat(document.getElementById("totalBudget").value) || 0;
-      const autoValue = total * 0.3;
-      document.getElementById("streamingBudget").value = autoValue.toFixed(2);
-    }
-
-function calculateGeofenceBudgets() {
-  const totalBudget = parseFloat(document.getElementById("totalBudget").value) || 0;
-  const streamingBudget = parseFloat(document.getElementById("streamingBudget").value) || 0;
-
-  const poiCount = parseInt(document.getElementById("poiGeofences").value) || 0;
-  const employerCount = parseInt(document.getElementById("employerGeofences").value) || 0;
-  const competitorCount = parseInt(document.getElementById("competitorGeofences").value) || 0;
-  const combinedCount = parseInt(document.getElementById("combinedGeofences").value) || 0;
-
-  const totalGeofences = poiCount + employerCount + competitorCount + combinedCount;
-
-  const remainingBudget = totalBudget - streamingBudget;
-  const perGeofenceBudget = totalGeofences > 0 ? remainingBudget / totalGeofences : 0;
-
-  const poiBudget = perGeofenceBudget * poiCount;
-  const employerBudget = perGeofenceBudget * employerCount;
-  const competitorBudget = perGeofenceBudget * competitorCount;
-  const combinedBudget = perGeofenceBudget * combinedCount;
-
-  // Output to spans
-  document.getElementById("streamingBudgetVal").textContent = streamingBudget.toFixed(2);
-  document.getElementById("remainingBudgetVal").textContent = remainingBudget.toFixed(2);
-  document.getElementById("perGeofenceVal").textContent = perGeofenceBudget.toFixed(2);
-  document.getElementById("poiBudgetVal").textContent = poiBudget.toFixed(2);
-  document.getElementById("employerBudgetVal").textContent = employerBudget.toFixed(2);
-  document.getElementById("competitorBudgetVal").textContent = competitorBudget.toFixed(2);
-
-  // Handle Combined Budget display (add if missing, update if present)
-  if (!document.getElementById("combinedBudgetVal")) {
-    const combinedLine = document.createElement("p");
-    combinedLine.innerHTML = `<strong>Combined POI + Employer Budget:</strong> $<span id="combinedBudgetVal">${combinedBudget.toFixed(2)}</span>`;
-    document.getElementById("result").appendChild(combinedLine);
-  } else {
-    document.getElementById("combinedBudgetVal").textContent = combinedBudget.toFixed(2);
-  }
-}
-
-    function resetForm() {
-  document.getElementById("totalBudget").value = "";
-  document.getElementById("streamingBudget").value = "";
-  document.getElementById("poiGeofences").value = "";
-  document.getElementById("employerGeofences").value = "";
-  document.getElementById("competitorGeofences").value = "";
-  document.getElementById("combinedGeofences").value = "";
-
-  // Reset all displayed output values
-  document.getElementById("streamingBudgetVal").textContent = "0.00";
-  document.getElementById("remainingBudgetVal").textContent = "0.00";
-  document.getElementById("perGeofenceVal").textContent = "0.00";
-  document.getElementById("poiBudgetVal").textContent = "0.00";
-  document.getElementById("employerBudgetVal").textContent = "0.00";
-  document.getElementById("competitorBudgetVal").textContent = "0.00";
-
-  const combined = document.getElementById("combinedBudgetVal");
-  if (combined) {
-    combined.textContent = "0.00";
-  }
-}
-/* Page background and centering */
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f0f2f5;
-  margin: 0;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh; /* Full screen height */
-}
-
-/* Centered card container */
-.card {
-  background-color: #ffffff;
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 500px;
-}
-
-
-  </script>
-
-</body>
-</html>
+    <label>Total Budget</lab
