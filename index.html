@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Full Geofence Budget Calculator</title>
+  <title>Geofence Budget Calculator</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -47,6 +47,10 @@
   <label>Total Budget</label>
   <input type="number" id="totalBudget" placeholder="Enter total budget" />
 
+  <label>Streaming TV Budget (fixed or 30%)</label>
+  <input type="number" id="streamingBudget" placeholder="Enter streaming TV budget" />
+  <button onclick="autoCalculateStreaming()">Auto Calculate 30%</button>
+
   <label>POI Geofences</label>
   <input type="number" id="poiGeofences" placeholder="Enter number of POI geofences" />
 
@@ -62,6 +66,8 @@
   <button onclick="calculateGeofenceBudgets()">Calculate</button>
 
   <div class="output" id="result">
+    <p><strong>Streaming TV Budget:</strong> $0.00</p>
+    <p><strong>Remaining Budget (after streaming):</strong> $0.00</p>
     <p><strong>Per Geofence Budget:</strong> $0.00</p>
     <p><strong>POI Budget:</strong> $0.00</p>
     <p><strong>Employer Budget:</strong> $0.00</p>
@@ -70,15 +76,25 @@
   </div>
 
   <script>
+    function autoCalculateStreaming() {
+      const total = parseFloat(document.getElementById("totalBudget").value) || 0;
+      const autoValue = total * 0.3;
+      document.getElementById("streamingBudget").value = autoValue.toFixed(2);
+    }
+
     function calculateGeofenceBudgets() {
       const totalBudget = parseFloat(document.getElementById("totalBudget").value) || 0;
+      const streamingBudget = parseFloat(document.getElementById("streamingBudget").value) || 0;
+
       const poiCount = parseInt(document.getElementById("poiGeofences").value) || 0;
       const employerCount = parseInt(document.getElementById("employerGeofences").value) || 0;
       const competitorCount = parseInt(document.getElementById("competitorGeofences").value) || 0;
       const combinedCount = parseInt(document.getElementById("combinedGeofences").value) || 0;
 
       const totalGeofences = poiCount + employerCount + competitorCount;
-      const perGeofenceBudget = totalGeofences > 0 ? totalBudget / totalGeofences : 0;
+
+      const remainingBudget = totalBudget - streamingBudget;
+      const perGeofenceBudget = totalGeofences > 0 ? remainingBudget / totalGeofences : 0;
 
       const poiBudget = perGeofenceBudget * poiCount;
       const employerBudget = perGeofenceBudget * employerCount;
@@ -86,6 +102,8 @@
       const combinedBudget = perGeofenceBudget * combinedCount;
 
       document.getElementById("result").innerHTML = `
+        <p><strong>Streaming TV Budget:</strong> $${streamingBudget.toFixed(2)}</p>
+        <p><strong>Remaining Budget (after streaming):</strong> $${remainingBudget.toFixed(2)}</p>
         <p><strong>Per Geofence Budget:</strong> $${perGeofenceBudget.toFixed(2)}</p>
         <p><strong>POI Budget:</strong> $${poiBudget.toFixed(2)}</p>
         <p><strong>Employer Budget:</strong> $${employerBudget.toFixed(2)}</p>
