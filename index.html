@@ -3,49 +3,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Full Geofence Budget Calculator</title>
+  <title>Budget Calculator</title>
   <style>
     body {
       font-family: Arial, sans-serif;
+      padding: 20px;
       max-width: 500px;
       margin: auto;
-      padding: 20px;
-      background-color: #f4f4f4;
+      background-color: #f5f5f5;
     }
     h2 {
       text-align: center;
     }
     input {
       width: 100%;
-      padding: 10px;
+      padding: 8px;
       margin: 8px 0;
       box-sizing: border-box;
     }
     button {
       width: 100%;
       padding: 10px;
-      background-color: #2ecc71;
+      background-color: #1abc9c;
       color: white;
       border: none;
       cursor: pointer;
       font-weight: bold;
     }
     button:hover {
-      background-color: #27ae60;
+      background-color: #16a085;
     }
     .output {
-      margin-top: 20px;
       background: #e0e0e0;
       padding: 15px;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
 
-  <h2>Geofence Budget Calculator</h2>
+  <h2>Budget Calculator</h2>
 
   <label>Total Budget</label>
   <input type="number" id="totalBudget" placeholder="Enter total budget" />
+
+  <label>Streaming TV Budget (30% Auto Calculate)</label>
+  <input type="number" id="streamingBudget" placeholder="Enter custom amount" />
+  <button onclick="autoCalculateStreaming()">Auto Calculate 30%</button>
 
   <label>POI Geofences</label>
   <input type="number" id="poiGeofences" placeholder="Enter number of POI geofences" />
@@ -56,13 +60,13 @@
   <label>Competitor Resident Geofences</label>
   <input type="number" id="competitorGeofences" placeholder="Enter number of Competitor geofences" />
 
-  <label>Combined POI + Employer Geofences (optional)</label>
+  <label>Combine POI + Employer Geofences (optional)</label>
   <input type="number" id="combinedGeofences" placeholder="Enter combined POI + Employer geofences" />
 
-  <button onclick="calculateGeofenceBudgets()">Calculate</button>
+  <button onclick="calculateBudget()">Calculate</button>
 
-  <div class="output" id="result">
-    <p><strong>Per Geofence Budget:</strong> $0.00</p>
+  <div class="output" id="results">
+    <p><strong>Remaining Budget:</strong> $0.00</p>
     <p><strong>POI Budget:</strong> $0.00</p>
     <p><strong>Employer Budget:</strong> $0.00</p>
     <p><strong>Competitor Budget:</strong> $0.00</p>
@@ -70,23 +74,29 @@
   </div>
 
   <script>
-    function calculateGeofenceBudgets() {
-      const totalBudget = parseFloat(document.getElementById("totalBudget").value) || 0;
+    function autoCalculateStreaming() {
+      const total = parseFloat(document.getElementById("totalBudget").value) || 0;
+      const autoValue = total * 0.3;
+      document.getElementById("streamingBudget").value = autoValue.toFixed(2);
+    }
+
+    function calculateBudget() {
+      const total = parseFloat(document.getElementById("totalBudget").value) || 0;
+      const streaming = parseFloat(document.getElementById("streamingBudget").value) || 0;
       const poiCount = parseInt(document.getElementById("poiGeofences").value) || 0;
       const employerCount = parseInt(document.getElementById("employerGeofences").value) || 0;
       const competitorCount = parseInt(document.getElementById("competitorGeofences").value) || 0;
       const combinedCount = parseInt(document.getElementById("combinedGeofences").value) || 0;
 
+      const remaining = total - streaming;
       const totalGeofences = poiCount + employerCount + competitorCount;
-      const perGeofenceBudget = totalGeofences > 0 ? totalBudget / totalGeofences : 0;
+      const poiBudget = totalGeofences > 0 ? (remaining * poiCount) / totalGeofences : 0;
+      const employerBudget = totalGeofences > 0 ? (remaining * employerCount) / totalGeofences : 0;
+      const competitorBudget = totalGeofences > 0 ? (remaining * competitorCount) / totalGeofences : 0;
+      const combinedBudget = totalGeofences > 0 ? (remaining * combinedCount) / totalGeofences : 0;
 
-      const poiBudget = perGeofenceBudget * poiCount;
-      const employerBudget = perGeofenceBudget * employerCount;
-      const competitorBudget = perGeofenceBudget * competitorCount;
-      const combinedBudget = perGeofenceBudget * combinedCount;
-
-      document.getElementById("result").innerHTML = `
-        <p><strong>Per Geofence Budget:</strong> $${perGeofenceBudget.toFixed(2)}</p>
+      document.getElementById("results").innerHTML = `
+        <p><strong>Remaining Budget:</strong> $${remaining.toFixed(2)}</p>
         <p><strong>POI Budget:</strong> $${poiBudget.toFixed(2)}</p>
         <p><strong>Employer Budget:</strong> $${employerBudget.toFixed(2)}</p>
         <p><strong>Competitor Budget:</strong> $${competitorBudget.toFixed(2)}</p>
