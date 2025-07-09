@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Hotel/RestaurantGeo Budget Calculator</title>
+  <title>Addressable Budget Calculator</title>
   <style>
-    /* General page styling */
     body {
       font-family: Arial, sans-serif;
       background-color: #f0f2f5;
@@ -17,7 +16,6 @@
       min-height: 100vh;
     }
 
-    /* Card styling */
     .card {
       background-color: #ffffff;
       border-radius: 16px;
@@ -78,13 +76,17 @@
 </head>
 <body>
   <div class="card">
-    <h2>Hotel/RestaurantGeo Budget Calculator</h2>
+    <h2>Addressable Budget Calculator</h2>
 
     <label>Total Budget</label>
     <input type="number" id="totalBudget" placeholder="Enter total budget" />
 
-    <label>Addressable Streaming TV Budget (50% of Addressable Campaign Budget)</label>
+    <label>Streaming TV Budget (30% of Total Budget)</label>
     <input type="number" id="streamingBudget" placeholder="Enter Streaming TV budget" />
+
+    <label>Addressable Campaign Budget (50% of Total Budget)</label>
+    <input type="number" id="addressableBudget" placeholder="Auto calculated addressable budget" disabled />
+
     <button onclick="autoCalculateStreaming()">Auto Calculate 30%</button>
     <div style="margin-top: 16px;"></div>
 
@@ -103,6 +105,7 @@
     <button onclick="calculateGeofenceBudgets()">Calculate</button>
 
     <div class="output" id="result">
+      <p><strong>Addressable Budget:</strong> $<span id="addressableBudgetVal">0.00</span></p>
       <p><strong>Streaming TV Budget:</strong> $<span id="streamingBudgetVal">0.00</span></p>
       <p><strong>Remaining Budget:</strong> $<span id="remainingBudgetVal">0.00</span></p>
       <p><strong>Budget for Each Geofence:</strong> $<span id="perGeofenceVal">0.00</span></p>
@@ -118,13 +121,18 @@
   <script>
     function autoCalculateStreaming() {
       const total = parseFloat(document.getElementById("totalBudget").value) || 0;
-      const autoValue = total * 0.3;
-      document.getElementById("streamingBudget").value = autoValue.toFixed(2);
+      const half = total * 0.5;
+      const streaming = half;
+      const addressable = half;
+
+      document.getElementById("streamingBudget").value = streaming.toFixed(2);
+      document.getElementById("addressableBudget").value = addressable.toFixed(2);
     }
 
     function calculateGeofenceBudgets() {
       const totalBudget = parseFloat(document.getElementById("totalBudget").value) || 0;
       const streamingBudget = parseFloat(document.getElementById("streamingBudget").value) || 0;
+      const addressableBudget = parseFloat(document.getElementById("addressableBudget").value) || 0;
 
       const poiCount = parseInt(document.getElementById("poiGeofences").value) || 0;
       const employerCount = parseInt(document.getElementById("employerGeofences").value) || 0;
@@ -133,7 +141,7 @@
 
       const totalGeofences = poiCount + employerCount + competitorCount + combinedCount;
 
-      const remainingBudget = totalBudget - streamingBudget;
+      const remainingBudget = totalBudget - streamingBudget - addressableBudget;
       const perGeofenceBudget = totalGeofences > 0 ? remainingBudget / totalGeofences : 0;
 
       const poiBudget = perGeofenceBudget * poiCount;
@@ -141,6 +149,7 @@
       const competitorBudget = perGeofenceBudget * competitorCount;
       const combinedBudget = perGeofenceBudget * combinedCount;
 
+      document.getElementById("addressableBudgetVal").textContent = addressableBudget.toFixed(2);
       document.getElementById("streamingBudgetVal").textContent = streamingBudget.toFixed(2);
       document.getElementById("remainingBudgetVal").textContent = remainingBudget.toFixed(2);
       document.getElementById("perGeofenceVal").textContent = perGeofenceBudget.toFixed(2);
@@ -160,23 +169,12 @@
     function resetForm() {
       document.getElementById("totalBudget").value = "";
       document.getElementById("streamingBudget").value = "";
+      document.getElementById("addressableBudget").value = "";
       document.getElementById("poiGeofences").value = "";
       document.getElementById("employerGeofences").value = "";
       document.getElementById("competitorGeofences").value = "";
       document.getElementById("combinedGeofences").value = "";
 
+      document.getElementById("addressableBudgetVal").textContent = "0.00";
       document.getElementById("streamingBudgetVal").textContent = "0.00";
-      document.getElementById("remainingBudgetVal").textContent = "0.00";
-      document.getElementById("perGeofenceVal").textContent = "0.00";
-      document.getElementById("poiBudgetVal").textContent = "0.00";
-      document.getElementById("employerBudgetVal").textContent = "0.00";
-      document.getElementById("competitorBudgetVal").textContent = "0.00";
-
-      const combined = document.getElementById("combinedBudgetVal");
-      if (combined) {
-        combined.textContent = "0.00";
-      }
-    }
-  </script>
-</body>
-</html>
+      document.getElementById("remainingBudgetVal").textConten
