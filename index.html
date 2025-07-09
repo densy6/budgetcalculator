@@ -80,33 +80,33 @@
       document.getElementById("streamingBudget").value = autoValue.toFixed(2);
     }
 
-  function calculateBudget() {
-  const total = parseFloat(document.getElementById("totalBudget").value) || 0;
-  const streaming = parseFloat(document.getElementById("streamingBudget").value) || 0;
-  const poiCount = parseInt(document.getElementById("poiGeofences").value) || 0;
-  const employerCount = parseInt(document.getElementById("employerGeofences").value) || 0;
-  const competitorCount = parseInt(document.getElementById("competitorGeofences").value) || 0;
-  const combinedCount = parseInt(document.getElementById("combinedGeofences").value) || 0;
+    function calculateBudget() {
+      const total = parseFloat(document.getElementById("totalBudget").value) || 0;
+      const streaming = parseFloat(document.getElementById("streamingBudget").value) || 0;
+      const poiCount = parseInt(document.getElementById("poiGeofences").value) || 0;
+      const employerCount = parseInt(document.getElementById("employerGeofences").value) || 0;
+      const competitorCount = parseInt(document.getElementById("competitorGeofences").value) || 0;
+      const combinedCount = parseInt(document.getElementById("combinedGeofences").value) || 0;
 
-  const remaining = total - streaming;
-  const totalGeofences = poiCount + employerCount + competitorCount;
+      const remaining = total - streaming;
+      const totalGeofences = poiCount + employerCount + competitorCount;
 
-  // Avoid division by zero
-  const perGeofenceBudget = totalGeofences > 0 ? remaining / totalGeofences : 0;
+      // Avoid division by zero
+      const perGeofenceBudget = totalGeofences > 0 ? remaining / totalGeofences : 0;
 
-  const poiBudget = perGeofenceBudget * poiCount;
-  const employerBudget = perGeofenceBudget * employerCount;
-  const competitorBudget = perGeofenceBudget * competitorCount;
-  const combinedBudget = perGeofenceBudget * combinedCount;
+      const poiBudget = perGeofenceBudget * poiCount;
+      const employerBudget = perGeofenceBudget * employerCount;
+      const competitorBudget = perGeofenceBudget * competitorCount;
+      const combinedBudget = perGeofenceBudget * combinedCount;
 
-  document.getElementById("results").innerHTML = `
-    <p><strong>Remaining Budget:</strong> $${remaining.toFixed(2)}</p>
-    <p><strong>POI Budget:</strong> $${poiBudget.toFixed(2)}</p>
-    <p><strong>Employer Budget:</strong> $${employerBudget.toFixed(2)}</p>
-    <p><strong>Competitor Budget:</strong> $${competitorBudget.toFixed(2)}</p>
-    <p><strong>Combined POI + Employer Budget:</strong> $${combinedBudget.toFixed(2)}</p>
-  `;
-}
+      document.getElementById("results").innerHTML = `
+        <p><strong>Remaining Budget:</strong> $${remaining.toFixed(2)}</p>
+        <p><strong>POI Budget:</strong> $${poiBudget.toFixed(2)}</p>
+        <p><strong>Employer Budget:</strong> $${employerBudget.toFixed(2)}</p>
+        <p><strong>Competitor Budget:</strong> $${competitorBudget.toFixed(2)}</p>
+        <p><strong>Combined POI + Employer Budget:</strong> $${combinedBudget.toFixed(2)}</p>
+      `;
+    }
   </script>
 
 </body>
