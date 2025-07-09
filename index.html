@@ -84,7 +84,7 @@
       document.getElementById("streamingBudget").value = autoValue.toFixed(2);
     }
 
-    function calculateGeofenceBudgets() {
+function calculateGeofenceBudgets() {
   const totalBudget = parseFloat(document.getElementById("totalBudget").value) || 0;
   const streamingBudget = parseFloat(document.getElementById("streamingBudget").value) || 0;
 
@@ -103,7 +103,7 @@
   const competitorBudget = perGeofenceBudget * competitorCount;
   const combinedBudget = perGeofenceBudget * combinedCount;
 
-  // Output updated values directly to the spans
+  // Output to spans
   document.getElementById("streamingBudgetVal").textContent = streamingBudget.toFixed(2);
   document.getElementById("remainingBudgetVal").textContent = remainingBudget.toFixed(2);
   document.getElementById("perGeofenceVal").textContent = perGeofenceBudget.toFixed(2);
@@ -111,7 +111,7 @@
   document.getElementById("employerBudgetVal").textContent = employerBudget.toFixed(2);
   document.getElementById("competitorBudgetVal").textContent = competitorBudget.toFixed(2);
 
-  // You can display Combined Budget below if you'd like
+  // Handle Combined Budget display (add if missing, update if present)
   if (!document.getElementById("combinedBudgetVal")) {
     const combinedLine = document.createElement("p");
     combinedLine.innerHTML = `<strong>Combined POI + Employer Budget:</strong> $<span id="combinedBudgetVal">${combinedBudget.toFixed(2)}</span>`;
