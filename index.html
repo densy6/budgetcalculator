@@ -73,6 +73,9 @@
   <p><strong>POI Budget:</strong> $<span id="poiBudgetVal">0.00</span></p>
   <p><strong>Employer Budget:</strong> $<span id="employerBudgetVal">0.00</span></p>
   <p><strong>Competitor-Resident Budget:</strong> $<span id="competitorBudgetVal">0.00</span></p>
+    
+  <button onclick="resetForm()" style="background-color: #e74c3c; margin-top: 10px;">Reset</button>
+
 </div>
 
   <script>
@@ -118,6 +121,29 @@
     document.getElementById("combinedBudgetVal").textContent = combinedBudget.toFixed(2);
   }
 }
+
+    function resetForm() {
+  document.getElementById("totalBudget").value = "";
+  document.getElementById("streamingBudget").value = "";
+  document.getElementById("poiGeofences").value = "";
+  document.getElementById("employerGeofences").value = "";
+  document.getElementById("competitorGeofences").value = "";
+  document.getElementById("combinedGeofences").value = "";
+
+  // Reset all displayed output values
+  document.getElementById("streamingBudgetVal").textContent = "0.00";
+  document.getElementById("remainingBudgetVal").textContent = "0.00";
+  document.getElementById("perGeofenceVal").textContent = "0.00";
+  document.getElementById("poiBudgetVal").textContent = "0.00";
+  document.getElementById("employerBudgetVal").textContent = "0.00";
+  document.getElementById("competitorBudgetVal").textContent = "0.00";
+
+  const combined = document.getElementById("combinedBudgetVal");
+  if (combined) {
+    combined.textContent = "0.00";
+  }
+}
+
   </script>
 
 </body>
