@@ -312,6 +312,8 @@
 
   noteText.textContent = message;
   noteBox.style.display = "block";
+
+      if (!isResetting) showPackageNote();
 }
 
     function resetForm() {
