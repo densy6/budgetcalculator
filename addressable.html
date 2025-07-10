@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Hotel/RestaurantGeo Budget Calculator</title>
+  <title>Addressable Budget Calculator</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -81,14 +81,45 @@
     .hidden {
       display: none;
     }
+
+    .note {
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #fff6cc;
+      border-left: 5px solid #ffcc00;
+      font-size: 0.9em;
+    }
+
+    .note.warning {
+      background-color: #fdecea;
+      border-left: 5px solid #f44336;
+      color: #b71c1c;
+      font-weight: bold;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      20% { transform: translateX(-4px); }
+      40% { transform: translateX(4px); }
+      60% { transform: translateX(-3px); }
+      80% { transform: translateX(3px); }
+      100% { transform: translateX(0); }
+    }
+
+    .shake {
+      animation: shake 0.4s ease-in-out;
+    }
   </style>
 </head>
 <body>
   <div class="card">
-    <h2>Hotel/RestaurantGeo Budget Calculator</h2>
+    <h2>Addressable Budget Calculator</h2>
 
     <label>Total Budget</label>
-    <input type="number" id="totalBudget" placeholder="Enter total budget" />
+    <input type="number" id="totalBudget" placeholder="Enter total budget" oninput="evaluatePackage()" />
+
+    <div id="packageNote" class="note"></div>
+    <div id="geofenceWarning" class="note"></div>
 
     <label>
       <input type="checkbox" id="includeStreaming" onchange="toggleStreamingField()" />
@@ -106,16 +137,16 @@
     <button onclick="autoCalculateStreaming()">Auto Calculate</button>
 
     <label>POI Geofences</label>
-    <input type="number" id="poiGeofences" placeholder="Enter number of POI geofences" />
+    <input type="number" id="poiGeofences" placeholder="Enter number of POI geofences" oninput="evaluatePackage()" />
 
     <label>Employer Geofences</label>
-    <input type="number" id="employerGeofences" placeholder="Enter number of Employer geofences" />
+    <input type="number" id="employerGeofences" placeholder="Enter number of Employer geofences" oninput="evaluatePackage()" />
 
     <label>Competitor-Resident Geofences</label>
-    <input type="number" id="competitorGeofences" placeholder="Enter number of Competitor-Resident geofences" />
+    <input type="number" id="competitorGeofences" placeholder="Enter number of Competitor-Resident geofences" oninput="evaluatePackage()" />
 
     <label>Combined POI + Employer Geofences (optional)</label>
-    <input type="number" id="combinedGeofences" placeholder="Enter combined POI + Employer geofences" />
+    <input type="number" id="combinedGeofences" placeholder="Enter combined POI + Employer geofences" oninput="evaluatePackage()" />
 
     <button onclick="calculateGeofenceBudgets()">Calculate</button>
 
@@ -189,15 +220,76 @@
       document.getElementById("combinedBudgetVal").textContent = (perGeofenceBudget * combinedCount).toFixed(2);
     }
 
+    function evaluatePackage() {
+      const budget = parseFloat(document.getElementById("totalBudget").value) || 0;
+      const poi = parseInt(document.getElementById("poiGeofences").value) || 0;
+      const emp = parseInt(document.getElementById("employerGeofences").value) || 0;
+      const comp = parseInt(document.getElementById("competitorGeofences").value) || 0;
+      const comb = parseInt(document.getElementById("combinedGeofences").value) || 0;
+      const totalLocations = poi + emp + comp + comb;
+
+      const packageNote = document.getElementById("packageNote");
+      const geofenceWarning = document.getElementById("geofenceWarning");
+
+      let note = "";
+      let warning = "";
+      let cap = null;
+      let packageName = "";
+
+      geofenceWarning.classList.remove("warning", "shake");
+
+      if (budget === 80) {
+        packageName = "Saver";
+        cap = 10;
+      } else if (budget === 160) {
+        packageName = "Standard";
+        cap = 20;
+      } else if (budget === 320) {
+        packageName = "Premium";
+        cap = 40;
+      }
+
+      if (packageName) {
+        note = `Client is on a <strong>${packageName}</strong> package ($${budget}) – maximum of ${cap} locations.`;
+
+        if (totalLocations > cap) {
+          warning = `⚠️ The client is on a ${packageName} package and only ${cap} locations can be added.`;
+          geofenceWarning.classList.add("warning");
+          geofenceWarning.classList.remove("shake");
+          void geofenceWarning.offsetWidth;
+          geofenceWarning.classList.add("shake");
+        }
+      } else {
+        note = "";
+        warning = "";
+      }
+
+      packageNote.innerHTML = note;
+      geofenceWarning.innerHTML = warning;
+    }
+
     function resetForm() {
-      const ids = ["totalBudget", "streamingBudget", "addressableBudget", "poiGeofences", "employerGeofences", "competitorGeofences", "combinedGeofences"];
-      ids.forEach(id => document.getElementById(id).value = "");
+      document.getElementById("totalBudget").value = "";
+      document.getElementById("streamingBudget").value = "";
+      document.getElementById("addressableBudget").value = "";
+      document.getElementById("poiGeofences").value = "";
+      document.getElementById("employerGeofences").value = "";
+      document.getElementById("competitorGeofences").value = "";
+      document.getElementById("combinedGeofences").value = "";
+      document.getElementById("packageNote").innerHTML = "";
+      document.getElementById("geofenceWarning").innerHTML = "";
+
+      document.getElementById("addressableBudgetVal").textContent = "0.00";
+      document.getElementById("streamingBudgetVal").textContent = "0.00";
+      document.getElementById("remainingBudgetVal").textContent = "0.00";
+      document.getElementById("perGeofenceVal").textContent = "0.00";
+      document.getElementById("poiBudgetVal").textContent = "0.00";
+      document.getElementById("employerBudgetVal").textContent = "0.00";
+      document.getElementById("competitorBudgetVal").textContent = "0.00";
+      document.getElementById("combinedBudgetVal").textContent = "0.00";
 
       document.getElementById("includeStreaming").checked = false;
-      toggleStreamingField();
-
-      const outputs = ["streamingBudgetVal", "addressableBudgetVal", "remainingBudgetVal", "perGeofenceVal", "poiBudgetVal", "employerBudgetVal", "competitorBudgetVal", "combinedBudgetVal"];
-      outputs.forEach(id => document.getElementById(id).textContent = "0.00");
+      document.getElementById("streamingSection").classList.add("hidden");
     }
   </script>
 </body>
