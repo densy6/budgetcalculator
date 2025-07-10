@@ -304,25 +304,27 @@
 }
 
     function resetForm() {
-      const ids = [
-        "totalBudget", "streamingBudget", "addressableBudget",
-        "poiGeofences", "employerGeofences", "competitorGeofences", "combinedGeofences"
-      ];
-      ids.forEach(id => document.getElementById(id).value = "");
+  const ids = [
+    "totalBudget", "streamingBudget", "addressableBudget",
+    "poiGeofences", "employerGeofences", "competitorGeofences", "combinedGeofences"
+  ];
+  ids.forEach(id => document.getElementById(id).value = "");
 
-      document.getElementById("includeStreaming").checked = false;
-      toggleStreamingField();
+  document.getElementById("includeStreaming").checked = false;
+  toggleStreamingField();
 
-      const outputs = [
-        "streamingBudgetVal", "addressableBudgetVal", "remainingBudgetVal", "perGeofenceVal",
-        "poiBudgetVal", "employerBudgetVal", "competitorBudgetVal", "combinedBudgetVal",
-        "retvTotalVal", "retvBudgetVal", "huluBudgetVal", "grandTotalVal"
-      ];
-      outputs.forEach(id => document.getElementById(id).textContent = "0.00");
+  document.getElementById("retvTier").value = "0";
+  calculateReTVAddOn(); // ✅ Reset ReTV add-on values
 
-      document.getElementById("retvTier").value = "0";
-      document.getElementById("packageNote").style.display = "none";
-    }
+  const outputs = [
+    "streamingBudgetVal", "addressableBudgetVal", "remainingBudgetVal", "perGeofenceVal",
+    "poiBudgetVal", "employerBudgetVal", "competitorBudgetVal", "combinedBudgetVal",
+    "grandTotalVal"
+  ];
+  outputs.forEach(id => document.getElementById(id).textContent = "0.00");
+
+  document.getElementById("packageNote").style.display = "none";
+}
   </script>
 </body>
 </html>
