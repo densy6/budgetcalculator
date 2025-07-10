@@ -96,7 +96,7 @@
 <body>
   <div class="card">
     <h2>Hotel/Resto/RetailGeo Budget Calculator</h2>
-
+  
     <label>Total Budget</label>
     <input type="number" id="totalBudget" placeholder="Enter total budget" />
 
@@ -129,13 +129,19 @@
 
     <hr />
 
-    <label for="retvTier">ReTV Add-on:</label>
+    <label for="retvTier">ReTV Add-on Tier</label>
     <select id="retvTier" onchange="calculateReTVAddOn()">
       <option value="0">None</option>
       <option value="1">Tier 1 – $130 total (ReTV: $95, Hulu: $35)</option>
       <option value="2">Tier 2 – $260 total (ReTV: $190, Hulu: $70)</option>
       <option value="3">Tier 3 – $390 total (ReTV: $285, Hulu: $105)</option>
     </select>
+
+    <div id="retvSection" class="output">
+      <p><strong>ReTV Add-on Total:</strong> $<span id="retvTotalVal">0.00</span></p>
+      <p><strong>ReTV Budget:</strong> $<span id="retvBudgetVal">0.00</span></p>
+      <p><strong>Hulu Budget:</strong> $<span id="huluBudgetVal">0.00</span></p>
+    </div>
 
     <button onclick="calculateGeofenceBudgets()">Calculate</button>
 
@@ -144,7 +150,7 @@
       <p><strong>Streaming TV Budget:</strong> $<span id="streamingBudgetVal">0.00</span></p>
       <p><strong>Remaining Geofencing Budget:</strong> $<span id="remainingBudgetVal">0.00</span></p>
       <p><strong>Budget per Geofence:</strong> $<span id="perGeofenceVal">0.00</span></p>
-      <p><strong>Total Budget (incl. ReTV):</strong> $<span id="grandTotalVal">0.00</span></p>
+      <p><strong>Total Budget (incl. RETV):</strong> $<span id="grandTotalVal">0.00</span></p>
       <hr />
       <p><strong>POI Campaign Budget:</strong> $<span id="poiBudgetVal">0.00</span></p>
       <p><strong>Employer Campaign Budget:</strong> $<span id="employerBudgetVal">0.00</span></p>
@@ -160,8 +166,6 @@
   </div>
 
   <script>
-    let isResetting = false;
-
     function toggleStreamingField() {
       const isChecked = document.getElementById("includeStreaming").checked;
       const streamingSection = document.getElementById("streamingSection");
@@ -250,10 +254,6 @@
 
       const grandTotal = baseBudget + retvTotal;
       document.getElementById("grandTotalVal").textContent = grandTotal.toFixed(2);
-
-      if (!isResetting) {
-        showPackageNote();
-      }
     }
 
     function showPackageNote() {
@@ -264,17 +264,10 @@
   const combinedCount = parseInt(document.getElementById("combinedGeofences").value) || 0;
   const retvTier = parseInt(document.getElementById("retvTier").value);
 
+  const totalGeofences = poiCount + employerCount + competitorCount + combinedCount;
+
   const noteBox = document.getElementById("packageNote");
   const noteText = document.getElementById("packageText");
-
-  // 🛑 Prevent note from showing if nothing is filled
-  if (totalBudget === 0 && retvTier === 0) {
-    noteText.textContent = "";
-    noteBox.style.display = "none";
-    return;
-  }
-
-  const totalGeofences = poiCount + employerCount + competitorCount + combinedCount;
 
   let packageType = "";
   let maxGeofences = 0;
@@ -296,8 +289,10 @@
   let message = "";
 
   if (totalGeofences > maxGeofences) {
+    // Show ONLY the warning message
     message = `⚠️ ${packageType} package includes up to ${maxGeofences} geofences. Custom packages may differ. For any questions, please reach out to the onboarding or client representative.`;
   } else {
+    // Show package + ReTV add-on if selected
     message = `${packageType} package`;
 
     if (retvTier > 0) {
@@ -312,13 +307,9 @@
 
   noteText.textContent = message;
   noteBox.style.display = "block";
-
-      if (!isResetting) showPackageNote();
 }
 
     function resetForm() {
-      isResetting = true;
-
       const ids = [
         "totalBudget", "streamingBudget", "addressableBudget",
         "poiGeofences", "employerGeofences", "competitorGeofences", "combinedGeofences"
@@ -328,9 +319,6 @@
       document.getElementById("includeStreaming").checked = false;
       toggleStreamingField();
 
-      document.getElementById("retvTier").value = "0";
-      updateGrandTotal();
-
       const outputs = [
         "streamingBudgetVal", "addressableBudgetVal", "remainingBudgetVal", "perGeofenceVal",
         "poiBudgetVal", "employerBudgetVal", "competitorBudgetVal", "combinedBudgetVal",
@@ -338,12 +326,8 @@
       ];
       outputs.forEach(id => document.getElementById(id).textContent = "0.00");
 
-      const noteBox = document.getElementById("packageNote");
-      const noteText = document.getElementById("packageText");
-      noteText.textContent = "";
-      noteBox.style.display = "none";
-
-      isResetting = false;
+      document.getElementById("retvTier").value = "0";
+      document.getElementById("packageNote").style.display = "none";
     }
   </script>
 </body>
