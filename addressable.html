@@ -251,45 +251,57 @@
     }
 
     function showPackageNote() {
-      const totalBudget = parseFloat(document.getElementById("totalBudget").value) || 0;
-      const poiCount = parseInt(document.getElementById("poiGeofences").value) || 0;
-      const employerCount = parseInt(document.getElementById("employerGeofences").value) || 0;
-      const competitorCount = parseInt(document.getElementById("competitorGeofences").value) || 0;
-      const combinedCount = parseInt(document.getElementById("combinedGeofences").value) || 0;
+  const totalBudget = parseFloat(document.getElementById("totalBudget").value) || 0;
+  const poiCount = parseInt(document.getElementById("poiGeofences").value) || 0;
+  const employerCount = parseInt(document.getElementById("employerGeofences").value) || 0;
+  const competitorCount = parseInt(document.getElementById("competitorGeofences").value) || 0;
+  const combinedCount = parseInt(document.getElementById("combinedGeofences").value) || 0;
+  const retvTier = parseInt(document.getElementById("retvTier").value);
 
-      const totalGeofences = poiCount + employerCount + competitorCount + combinedCount;
+  const totalGeofences = poiCount + employerCount + competitorCount + combinedCount;
 
-      const noteBox = document.getElementById("packageNote");
-      const noteText = document.getElementById("packageText");
+  const noteBox = document.getElementById("packageNote");
+  const noteText = document.getElementById("packageText");
 
-      let packageType = "";
-      let maxGeofences = 0;
+  let packageType = "";
+  let maxGeofences = 0;
 
-      if (totalBudget >= 320) {
-        packageType = "Premium";
-        maxGeofences = 40;
-      } else if (totalBudget >= 160) {
-        packageType = "Standard";
-        maxGeofences = 20;
-      } else if (totalBudget >= 80) {
-        packageType = "Saver";
-        maxGeofences = 10;
-      } else {
-        noteBox.style.display = "none";
-        return;
-      }
+  if (totalBudget >= 320) {
+    packageType = "Premium";
+    maxGeofences = 40;
+  } else if (totalBudget >= 160) {
+    packageType = "Standard";
+    maxGeofences = 20;
+  } else if (totalBudget >= 80) {
+    packageType = "Saver";
+    maxGeofences = 10;
+  } else {
+    noteBox.style.display = "none";
+    return;
+  }
 
-      let message = "";
+  let message = "";
 
-      if (totalGeofences > maxGeofences) {
-        message = `⚠️ ${packageType} package includes up to ${maxGeofences} geofences. Custom packages may differ. For any questions, please reach out to the onboarding or client representative.`;
-      } else {
-        message = `${packageType} package`;
-      }
+  if (totalGeofences > maxGeofences) {
+    // Show ONLY the warning message
+    message = `⚠️ ${packageType} package includes up to ${maxGeofences} geofences. Custom packages may differ. For any questions, please reach out to the onboarding or client representative.`;
+  } else {
+    // Show package + ReTV add-on if selected
+    message = `${packageType} package`;
 
-      noteText.textContent = message;
-      noteBox.style.display = "block";
+    if (retvTier > 0) {
+      const tierNames = {
+        1: "Tier 1 (ReTV: $95, Hulu: $35)",
+        2: "Tier 2 (ReTV: $190, Hulu: $70)",
+        3: "Tier 3 (ReTV: $285, Hulu: $105)"
+      };
+      message += `\n➕ ReTV Add-on: ${tierNames[retvTier]}`;
     }
+  }
+
+  noteText.textContent = message;
+  noteBox.style.display = "block";
+}
 
     function resetForm() {
       const ids = [
