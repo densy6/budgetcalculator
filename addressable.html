@@ -236,19 +236,18 @@
     return;
   }
 
+  let message = `${packageType} package.`;
   if (totalGeofences > maxGeofences) {
-    // Show warning only if over the geofence limit
-    noteText.textContent = `${packageType} package. Up to ${maxGeofences} geofences allowed. Custom packages may vary—check with the onboarding/client rep for details.`;
-    noteBox.style.display = "block";
+    message += ` Up to ${maxGeofences} geofences allowed. Custom packages may vary—check with the onboarding/client rep for details.`;
 
-    // Scroll to the warning
+    // Scroll only if over the geofence limit
     setTimeout(() => {
       noteBox.scrollIntoView({ behavior: "smooth", block: "center" });
     }, 100);
-  } else {
-    // Hide the note if within limit
-    noteBox.style.display = "none";
   }
+
+  noteText.textContent = message;
+  noteBox.style.display = "block";
 }
 
     function resetForm() {
