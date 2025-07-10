@@ -114,7 +114,7 @@
     <button onclick="autoCalculateStreaming()">Auto Calculate</button>
     
     <p id="autoCalcNote" style="color: #ef6f22; font-size: 0.80em; text-align: left; margin-top: 10px;">
-      ℹ️ You must click “Auto Calculate” before “Calculate”
+    You must click “Auto Calculate” before “Calculate”
     </p>
 
     <label>POI Geofences</label>
@@ -240,10 +240,13 @@
     return;
   }
 
-  let message = `⚠️ ${packageType} package`;
-  if (totalGeofences > maxGeofences) {
-    message += ` includes up to ${maxGeofences} geofences. Custom packages may differ. For any questions, please reach out to the onboarding or client representative.`;
-  }
+let message = "";
+
+if (totalGeofences > maxGeofences) {
+  message = `${packageType} package includes up to ${maxGeofences} geofences. Custom packages may differ. For any questions, please reach out to the onboarding or client representative.`;
+} else {
+  message = `${packageType} package`;
+}
 
   noteText.textContent = message;
   noteBox.style.display = "block";
