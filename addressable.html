@@ -318,6 +318,9 @@
   // Reset ReTV tier dropdown
   document.getElementById("retvTier").value = "0";
 
+  // Update grand total to reflect cleared ReTV tier
+  updateGrandTotal();
+
   // Clear all displayed output values to 0.00
   const outputs = [
     "streamingBudgetVal", "addressableBudgetVal", "remainingBudgetVal", "perGeofenceVal",
