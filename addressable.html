@@ -159,24 +159,28 @@
     }
 
     function autoCalculateStreaming() {
-      const total = parseFloat(document.getElementById("totalBudget").value) || 0;
-      const includeStreaming = document.getElementById("includeStreaming").checked;
+  const total = parseFloat(document.getElementById("totalBudget").value) || 0;
+  const includeStreaming = document.getElementById("includeStreaming").checked;
 
-      const halfBudget = total * 0.5;
-      let addressable = halfBudget;
-      let streaming = 0;
+  const halfBudget = total * 0.5;
+  let addressable = halfBudget;
+  let streaming = 0;
 
-      if (includeStreaming) {
-        addressable = halfBudget / 2;
-        streaming = halfBudget / 2;
-      }
+  if (includeStreaming) {
+    addressable = halfBudget / 2;
+    streaming = halfBudget / 2;
+  }
 
-      document.getElementById("addressableBudget").value = addressable.toFixed(2);
-      document.getElementById("addressableBudgetVal").textContent = addressable.toFixed(2);
+  document.getElementById("addressableBudget").value = addressable.toFixed(2);
+  document.getElementById("addressableBudgetVal").textContent = addressable.toFixed(2);
 
-      document.getElementById("streamingBudget").value = streaming.toFixed(2);
-      document.getElementById("streamingBudgetVal").textContent = streaming.toFixed(2);
-    }
+  document.getElementById("streamingBudget").value = streaming.toFixed(2);
+  document.getElementById("streamingBudgetVal").textContent = streaming.toFixed(2);
+
+  // Calculate and display the remaining budget
+  const remainingBudget = total - (addressable + streaming);
+  document.getElementById("remainingBudgetVal").textContent = remainingBudget.toFixed(2);
+}
 
     function calculateGeofenceBudgets() {
       const totalBudget = parseFloat(document.getElementById("totalBudget").value) || 0;
