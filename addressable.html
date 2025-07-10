@@ -81,6 +81,14 @@
     .hidden {
       display: none;
     }
+
+    #packageNote {
+      background-color: #fff8e1;
+      border-left: 4px solid #ffc107;
+      padding: 10px;
+      margin-top: 10px;
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -129,6 +137,10 @@
       <p><strong>Employer Campaign Budget:</strong> $<span id="employerBudgetVal">0.00</span></p>
       <p><strong>Competitor-Resident Campaign Budget:</strong> $<span id="competitorBudgetVal">0.00</span></p>
       <p><strong>Combined POI + Employer Budget:</strong> $<span id="combinedBudgetVal">0.00</span></p>
+    </div>
+
+    <div id="packageNote">
+      <p id="packageText" style="margin: 0;"></p>
     </div>
 
     <button onclick="resetForm()" style="background-color: #ef6f22; color: white; margin-top: 10px;">Reset</button>
@@ -187,6 +199,46 @@
       document.getElementById("employerBudgetVal").textContent = (perGeofenceBudget * employerCount).toFixed(2);
       document.getElementById("competitorBudgetVal").textContent = (perGeofenceBudget * competitorCount).toFixed(2);
       document.getElementById("combinedBudgetVal").textContent = (perGeofenceBudget * combinedCount).toFixed(2);
+
+      showPackageNote(); // Show the package note and limit check
+    }
+
+    function showPackageNote() {
+      const totalBudget = parseFloat(document.getElementById("totalBudget").value) || 0;
+      const poiCount = parseInt(document.getElementById("poiGeofences").value) || 0;
+      const employerCount = parseInt(document.getElementById("employerGeofences").value) || 0;
+      const competitorCount = parseInt(document.getElementById("competitorGeofences").value) || 0;
+      const combinedCount = parseInt(document.getElementById("combinedGeofences").value) || 0;
+
+      const totalGeofences = poiCount + employerCount + competitorCount + combinedCount;
+
+      const noteBox = document.getElementById("packageNote");
+      const noteText = document.getElementById("packageText");
+
+      let packageType = "";
+      let maxGeofences = 0;
+
+      if (totalBudget >= 320) {
+        packageType = "Premium";
+        maxGeofences = 40;
+      } else if (totalBudget >= 160) {
+        packageType = "Standard";
+        maxGeofences = 20;
+      } else if (totalBudget >= 80) {
+        packageType = "Saver";
+        maxGeofences = 10;
+      } else {
+        noteBox.style.display = "none";
+        return;
+      }
+
+      let message = `The client is on a ${packageType} package.`;
+      if (totalGeofences > maxGeofences) {
+        message += ` Only ${maxGeofences} geofences can be added under this package.`;
+      }
+
+      noteText.textContent = message;
+      noteBox.style.display = "block";
     }
 
     function resetForm() {
@@ -198,6 +250,8 @@
 
       const outputs = ["streamingBudgetVal", "addressableBudgetVal", "remainingBudgetVal", "perGeofenceVal", "poiBudgetVal", "employerBudgetVal", "competitorBudgetVal", "combinedBudgetVal"];
       outputs.forEach(id => document.getElementById(id).textContent = "0.00");
+
+      document.getElementById("packageNote").style.display = "none";
     }
   </script>
 </body>
