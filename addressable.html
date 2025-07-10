@@ -304,26 +304,34 @@
 }
 
     function resetForm() {
+  // Clear all input fields
   const ids = [
     "totalBudget", "streamingBudget", "addressableBudget",
     "poiGeofences", "employerGeofences", "competitorGeofences", "combinedGeofences"
   ];
   ids.forEach(id => document.getElementById(id).value = "");
 
+  // Uncheck the streaming checkbox and hide streaming section
   document.getElementById("includeStreaming").checked = false;
   toggleStreamingField();
 
+  // Reset ReTV tier dropdown and values
   document.getElementById("retvTier").value = "0";
-  calculateReTVAddOn(); // ✅ Reset ReTV add-on values
+  calculateReTVAddOn();
 
+  // Reset all displayed output values to 0.00
   const outputs = [
     "streamingBudgetVal", "addressableBudgetVal", "remainingBudgetVal", "perGeofenceVal",
     "poiBudgetVal", "employerBudgetVal", "competitorBudgetVal", "combinedBudgetVal",
-    "grandTotalVal"
+    "retvTotalVal", "retvBudgetVal", "huluBudgetVal", "grandTotalVal"
   ];
   outputs.forEach(id => document.getElementById(id).textContent = "0.00");
 
-  document.getElementById("packageNote").style.display = "none";
+  // Hide package note
+  const noteBox = document.getElementById("packageNote");
+  const noteText = document.getElementById("packageText");
+  noteText.textContent = "";
+  noteBox.style.display = "none";
 }
   </script>
 </body>
