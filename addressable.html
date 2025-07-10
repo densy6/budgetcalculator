@@ -204,42 +204,47 @@
     }
 
     function showPackageNote() {
-      const totalBudget = parseFloat(document.getElementById("totalBudget").value) || 0;
-      const poiCount = parseInt(document.getElementById("poiGeofences").value) || 0;
-      const employerCount = parseInt(document.getElementById("employerGeofences").value) || 0;
-      const competitorCount = parseInt(document.getElementById("competitorGeofences").value) || 0;
-      const combinedCount = parseInt(document.getElementById("combinedGeofences").value) || 0;
+  const totalBudget = parseFloat(document.getElementById("totalBudget").value) || 0;
+  const poiCount = parseInt(document.getElementById("poiGeofences").value) || 0;
+  const employerCount = parseInt(document.getElementById("employerGeofences").value) || 0;
+  const competitorCount = parseInt(document.getElementById("competitorGeofences").value) || 0;
+  const combinedCount = parseInt(document.getElementById("combinedGeofences").value) || 0;
 
-      const totalGeofences = poiCount + employerCount + competitorCount + combinedCount;
+  const totalGeofences = poiCount + employerCount + competitorCount + combinedCount;
 
-      const noteBox = document.getElementById("packageNote");
-      const noteText = document.getElementById("packageText");
+  const noteBox = document.getElementById("packageNote");
+  const noteText = document.getElementById("packageText");
 
-      let packageType = "";
-      let maxGeofences = 0;
+  let packageType = "";
+  let maxGeofences = 0;
 
-      if (totalBudget >= 320) {
-        packageType = "Premium";
-        maxGeofences = 40;
-      } else if (totalBudget >= 160) {
-        packageType = "Standard";
-        maxGeofences = 20;
-      } else if (totalBudget >= 80) {
-        packageType = "Saver";
-        maxGeofences = 10;
-      } else {
-        noteBox.style.display = "none";
-        return;
-      }
+  if (totalBudget >= 320) {
+    packageType = "Premium";
+    maxGeofences = 40;
+  } else if (totalBudget >= 160) {
+    packageType = "Standard";
+    maxGeofences = 20;
+  } else if (totalBudget >= 80) {
+    packageType = "Saver";
+    maxGeofences = 10;
+  } else {
+    noteBox.style.display = "none";
+    return;
+  }
 
-      let message = `The client is on a ${packageType} package.`;
-      if (totalGeofences > maxGeofences) {
-        message += ` Only ${maxGeofences} geofences can be added under this package.`;
-      }
+  let message = `The client is on a ${packageType} package.`;
+  if (totalGeofences > maxGeofences) {
+    message += ` Only ${maxGeofences} geofences can be added under this package.`;
+  }
 
-      noteText.textContent = message;
-      noteBox.style.display = "block";
-    }
+  noteText.textContent = message;
+  noteBox.style.display = "block";
+
+  // Auto-scroll to the note
+  setTimeout(() => {
+    noteBox.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, 100); // Delay to ensure it's rendered before scroll
+}
 
     function resetForm() {
       const ids = ["totalBudget", "streamingBudget", "addressableBudget", "poiGeofences", "employerGeofences", "competitorGeofences", "combinedGeofences"];
