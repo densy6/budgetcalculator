@@ -110,10 +110,12 @@
 
     <label>Addressable Campaign Budget (auto-filled)</label>
     <input type="number" id="addressableBudget" disabled />
-     <p id="autoCalcNote" style="color: #f19676; font-size: 0.80em; text-align: center; margin-top: -10px;">
+     
+    <button onclick="autoCalculateStreaming()">Auto Calculate</button>
+    
+    <p id="autoCalcNote" style="color: #f19676; font-size: 0.80em; text-align: center; margin-top: -20px;">
       ⚠️ You must click “Auto Calculate” before “Calculate”
     </p>
-    <button onclick="autoCalculateStreaming()">Auto Calculate</button>
 
     <label>POI Geofences</label>
     <input type="number" id="poiGeofences" placeholder="Enter number of POI geofences" />
