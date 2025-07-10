@@ -236,9 +236,9 @@
     return;
   }
 
-  let message =ℹ️ `${packageType} package.`;
+  let message = `${packageType} package.`;
   if (totalGeofences > maxGeofences) {
-    message += ` Max ${maxGeofences} geofences. Disregard if client is on a custom package. Contact the client/onboarding rep for assistance.`;
+    message += ` Up to ${maxGeofences} geofences allowed. Custom packages may vary—check with the onboarding/client rep for details.`;
   }
 
   noteText.textContent = message;
