@@ -327,11 +327,14 @@
   ];
   outputs.forEach(id => document.getElementById(id).textContent = "0.00");
 
-  // Hide package note
+  // Clear and hide package note
   const noteBox = document.getElementById("packageNote");
   const noteText = document.getElementById("packageText");
   noteText.textContent = "";
   noteBox.style.display = "none";
+
+  // Re-run geofence logic to fully reset calculations and state
+  calculateGeofenceBudgets();
 }
   </script>
 </body>
