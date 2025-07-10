@@ -238,7 +238,7 @@
 
   let message = `The client is on a ${packageType} package.`;
   if (totalGeofences > maxGeofences) {
-    message += ` Only ${maxGeofences} geofences can be added under this package. Please contact the client representative for clarification.`;
+    message += ` Only ${maxGeofences} geofences can be added under this package. If the client is on a custom package, please disregard this message. For clarification, contact the client representative.`;
   }
 
   noteText.textContent = message;
