@@ -96,7 +96,7 @@
 <body>
   <div class="card">
     <h2>Hotel/Resto/RetailGeo Budget Calculator</h2>
-  
+
     <label>Total Budget</label>
     <input type="number" id="totalBudget" placeholder="Enter total budget" />
 
@@ -160,6 +160,8 @@
   </div>
 
   <script>
+    let isResetting = false;
+
     function toggleStreamingField() {
       const isChecked = document.getElementById("includeStreaming").checked;
       const streamingSection = document.getElementById("streamingSection");
@@ -248,93 +250,92 @@
 
       const grandTotal = baseBudget + retvTotal;
       document.getElementById("grandTotalVal").textContent = grandTotal.toFixed(2);
+
+      if (!isResetting) {
+        showPackageNote();
+      }
     }
 
     function showPackageNote() {
-  const totalBudget = parseFloat(document.getElementById("totalBudget").value) || 0;
-  const poiCount = parseInt(document.getElementById("poiGeofences").value) || 0;
-  const employerCount = parseInt(document.getElementById("employerGeofences").value) || 0;
-  const competitorCount = parseInt(document.getElementById("competitorGeofences").value) || 0;
-  const combinedCount = parseInt(document.getElementById("combinedGeofences").value) || 0;
-  const retvTier = parseInt(document.getElementById("retvTier").value);
+      const totalBudget = parseFloat(document.getElementById("totalBudget").value) || 0;
+      const poiCount = parseInt(document.getElementById("poiGeofences").value) || 0;
+      const employerCount = parseInt(document.getElementById("employerGeofences").value) || 0;
+      const competitorCount = parseInt(document.getElementById("competitorGeofences").value) || 0;
+      const combinedCount = parseInt(document.getElementById("combinedGeofences").value) || 0;
+      const retvTier = parseInt(document.getElementById("retvTier").value);
 
-  const totalGeofences = poiCount + employerCount + competitorCount + combinedCount;
+      const totalGeofences = poiCount + employerCount + competitorCount + combinedCount;
 
-  const noteBox = document.getElementById("packageNote");
-  const noteText = document.getElementById("packageText");
+      const noteBox = document.getElementById("packageNote");
+      const noteText = document.getElementById("packageText");
 
-  let packageType = "";
-  let maxGeofences = 0;
+      let packageType = "";
+      let maxGeofences = 0;
 
-  if (totalBudget >= 320) {
-    packageType = "Premium";
-    maxGeofences = 40;
-  } else if (totalBudget >= 160) {
-    packageType = "Standard";
-    maxGeofences = 20;
-  } else if (totalBudget >= 80) {
-    packageType = "Saver";
-    maxGeofences = 10;
-  } else {
-    noteBox.style.display = "none";
-    return;
-  }
+      if (totalBudget >= 320) {
+        packageType = "Premium";
+        maxGeofences = 40;
+      } else if (totalBudget >= 160) {
+        packageType = "Standard";
+        maxGeofences = 20;
+      } else if (totalBudget >= 80) {
+        packageType = "Saver";
+        maxGeofences = 10;
+      } else {
+        noteBox.style.display = "none";
+        return;
+      }
 
-  let message = "";
+      let message = "";
 
-  if (totalGeofences > maxGeofences) {
-    // Show ONLY the warning message
-    message = `⚠️ ${packageType} package includes up to ${maxGeofences} geofences. Custom packages may differ. For any questions, please reach out to the onboarding or client representative.`;
-  } else {
-    // Show package + ReTV add-on if selected
-    message = `${packageType} package`;
+      if (totalGeofences > maxGeofences) {
+        message = `⚠️ ${packageType} package includes up to ${maxGeofences} geofences. Custom packages may differ. For any questions, please reach out to the onboarding or client representative.`;
+      } else {
+        message = `${packageType} package`;
 
-    if (retvTier > 0) {
-      const tierNames = {
-        1: "Tier 1 (ReTV: $95, Hulu: $35)",
-        2: "Tier 2 (ReTV: $190, Hulu: $70)",
-        3: "Tier 3 (ReTV: $285, Hulu: $105)"
-      };
-      message += `\n➕ ReTV Add-on: ${tierNames[retvTier]}`;
+        if (retvTier > 0) {
+          const tierNames = {
+            1: "Tier 1 (ReTV: $95, Hulu: $35)",
+            2: "Tier 2 (ReTV: $190, Hulu: $70)",
+            3: "Tier 3 (ReTV: $285, Hulu: $105)"
+          };
+          message += `\n➕ ReTV Add-on: ${tierNames[retvTier]}`;
+        }
+      }
+
+      noteText.textContent = message;
+      noteBox.style.display = "block";
     }
-  }
-
-  noteText.textContent = message;
-  noteBox.style.display = "block";
-}
 
     function resetForm() {
-  // Clear all input fields
-  const ids = [
-    "totalBudget", "streamingBudget", "addressableBudget",
-    "poiGeofences", "employerGeofences", "competitorGeofences", "combinedGeofences"
-  ];
-  ids.forEach(id => document.getElementById(id).value = "");
+      isResetting = true;
 
-  // Uncheck the streaming checkbox and hide streaming section
-  document.getElementById("includeStreaming").checked = false;
-  toggleStreamingField();
+      const ids = [
+        "totalBudget", "streamingBudget", "addressableBudget",
+        "poiGeofences", "employerGeofences", "competitorGeofences", "combinedGeofences"
+      ];
+      ids.forEach(id => document.getElementById(id).value = "");
 
-  // Reset ReTV tier dropdown
-  document.getElementById("retvTier").value = "0";
+      document.getElementById("includeStreaming").checked = false;
+      toggleStreamingField();
 
-  // Update grand total to reflect cleared ReTV tier
-  updateGrandTotal();
+      document.getElementById("retvTier").value = "0";
+      updateGrandTotal();
 
-  // Clear all displayed output values to 0.00
-  const outputs = [
-    "streamingBudgetVal", "addressableBudgetVal", "remainingBudgetVal", "perGeofenceVal",
-    "poiBudgetVal", "employerBudgetVal", "competitorBudgetVal", "combinedBudgetVal",
-    "retvTotalVal", "retvBudgetVal", "huluBudgetVal", "grandTotalVal"
-  ];
-  outputs.forEach(id => document.getElementById(id).textContent = "0.00");
+      const outputs = [
+        "streamingBudgetVal", "addressableBudgetVal", "remainingBudgetVal", "perGeofenceVal",
+        "poiBudgetVal", "employerBudgetVal", "competitorBudgetVal", "combinedBudgetVal",
+        "retvTotalVal", "retvBudgetVal", "huluBudgetVal", "grandTotalVal"
+      ];
+      outputs.forEach(id => document.getElementById(id).textContent = "0.00");
 
-  // Clear and hide package note
-  const noteBox = document.getElementById("packageNote");
-  const noteText = document.getElementById("packageText");
-  noteText.textContent = "";
-  noteBox.style.display = "none";
-}
+      const noteBox = document.getElementById("packageNote");
+      const noteText = document.getElementById("packageText");
+      noteText.textContent = "";
+      noteBox.style.display = "none";
+
+      isResetting = false;
+    }
   </script>
 </body>
 </html>
